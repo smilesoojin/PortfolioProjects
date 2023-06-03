@@ -114,7 +114,7 @@ FROM PortfolioProject1.dbo.NashvilleHousing
 SELECT DISTINCT(SoldAsVacant), COUNT(SoldAsVacant)
 FROM PortfolioProject1.dbo.NashvilleHousing
 GROUP BY SoldAsVacant
-ORDER BY 2						-- Yes & No more popular than Y & N
+ORDER BY 2		-- Yes & No more popular than Y & N
 
 SELECT SoldAsVacant,
 CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
@@ -125,21 +125,21 @@ FROM PortfolioProject1.dbo.NashvilleHousing
 
 UPDATE NashvilleHousing
 SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
-						WHEN SoldAsVacant = 'N' THEN 'No'
-						ELSE SoldAsVacant
-				   END
+			WHEN SoldAsVacant = 'N' THEN 'No'
+			ELSE SoldAsVacant
+		   END
 
 
 -- 5. Remove Duplicates (not common practice but good to know how to do it)
 WITH RowNumCTE AS(
 	SELECT *,
-		   ROW_NUMBER() OVER (
-						PARTITION BY ParcelID,
-									 PropertyAddress,
-									 SalePrice,
-									 SaleDate,
-									 LegalReference
-						ORDER BY UniqueID ) AS row_num
+	       ROW_NUMBER() OVER (
+	  		    PARTITION BY ParcelID,
+					 PropertyAddress,
+					 SalePrice,
+					 SaleDate,
+					 LegalReference
+			    ORDER BY UniqueID ) AS row_num
 	FROM PortfolioProject1.dbo.NashvilleHousing
 )
 DELETE
