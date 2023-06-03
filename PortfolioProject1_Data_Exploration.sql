@@ -76,9 +76,9 @@ AS
 (
 	SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 			SUM(CONVERT(BIGINT, vac.new_vaccinations)) OVER(
-															PARTITION BY dea.location
-															ORDER BY dea.location, dea.date
-															) AS RollingVaccinated
+									PARTITION BY dea.location
+									ORDER BY dea.location, dea.date
+									) AS RollingVaccinated
 			--, (RollingVaccinated/dea.population)*100 -- can't do this, need to make a "new table"
 	FROM PortfolioProject1..CovidDeaths dea
 	JOIN PortfolioProject1..CovidVaccinations vac
@@ -91,7 +91,7 @@ SELECT *, (RollingVaccinated/Population)*100
 FROM PopvsVac
 
 -- Total Population vs. Vaccinations (using TEMP TABLE)
-DROP TABLE IF EXISTS #PercentPopulationVaccinated			-- resets the temp table in case we need to make adjustments
+DROP TABLE IF EXISTS #PercentPopulationVaccinated		-- resets the temp table in case we need to make adjustments
 CREATE TABLE #PercentPopulationVaccinated
 (
 Continent nvarchar(255),
@@ -105,9 +105,9 @@ RollingVaccinated numeric
 INSERT INTO #PercentPopulationVaccinated
 	SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 			SUM(CONVERT(BIGINT, vac.new_vaccinations)) OVER(
-															PARTITION BY dea.location
-															ORDER BY dea.location, dea.date
-															) AS RollingPeopleVaccinated
+									PARTITION BY dea.location
+									ORDER BY dea.location, dea.date
+									) AS RollingPeopleVaccinated
 			--(RollingVaccinated/dea.population)*100
 	FROM PortfolioProject1..CovidDeaths dea
 	JOIN PortfolioProject1..CovidVaccinations vac
@@ -123,9 +123,9 @@ FROM #PercentPopulationVaccinated
 CREATE VIEW PercentPopulationVaccinated AS
 	SELECT dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations,
 			SUM(CONVERT(BIGINT, vac.new_vaccinations)) OVER(
-															PARTITION BY dea.location
-															ORDER BY dea.location, dea.date
-															) AS RollingVaccinated
+									PARTITION BY dea.location
+									ORDER BY dea.location, dea.date
+									) AS RollingVaccinated
 			--(RollingPeopleVaccinated/population)*100
 	FROM PortfolioProject1..CovidDeaths dea
 	JOIN PortfolioProject1..CovidVaccinations vac
